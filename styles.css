@@ -121,6 +121,82 @@ ul { list-style: none; }
   opacity: 0.85;
 }
 
+.skills-section {
+  padding-top: 2rem !important;
+  padding-bottom: 0 !important;
+  background: var(--clr-bg-1);
+}
+
+.skill-graph-wrapper {
+  position: relative;
+  width: 100%;
+  height: 1000px;
+  margin-bottom: 0;
+  overflow: hidden;
+  padding: 0 !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#skill-graph-container {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  /* Grid removed as requested */
+}
+
+.hub-bg-box {
+  fill: rgba(30, 41, 59, 0.4) !important;
+  fill-opacity: 0.6 !important;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+}
+
+.node-rect {
+  stroke-width: 1.5px;
+  fill-opacity: 0.85;
+  transition: all 0.3s ease;
+}
+
+.node-rect.tech { stroke: #3b82f6; fill: #111827; }
+.node-rect.ind { stroke: #10b981; fill: #111827; }
+.node-rect.tool { stroke: #eab308; fill: #111827; }
+
+.node-pod:hover .node-rect {
+  fill-opacity: 1;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.node-pod.active .node-glow.tech, .node-pod:hover .node-glow.tech { fill: #3b82f6; opacity: 0.25; }
+.node-pod.active .node-glow.ind, .node-pod:hover .node-glow.ind { fill: #10b981; opacity: 0.25; }
+.node-pod.active .node-glow.tool, .node-pod:hover .node-glow.tool { fill: #eab308; opacity: 0.25; }
+
+.node-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  fill: #e2e8f0;
+  pointer-events: none;
+}
+
+.node-pod:hover .node-text {
+  fill: #ffffff;
+}
+
+.link-line {
+  stroke: rgba(148, 163, 184, 0.2);
+  stroke-width: 1.2px;
+  fill: none;
+  transition: all 0.4s ease;
+}
+
+.link-line.active {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+}
+
 .section-title {
   font-size: clamp(2rem, 4vw, 2.8rem);
   font-weight: 800;
@@ -1315,6 +1391,7 @@ ul { list-style: none; }
   color: var(--clr-text-3);
   transition: var(--transition);
 }
+
 
 .social-link svg { width: 18px; height: 18px; }
 

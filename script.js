@@ -24,7 +24,288 @@ document.addEventListener('DOMContentLoaded', () => {
   initSkillBars();
   initHamburger();
   initContactForm();
+  initSkillGraph();
 });
+
+/* ══════════════════════════════════════════
+   11. INTERACTIVE SKILL GRAPH (D3.js)
+══════════════════════════════════════════ */
+function initSkillGraph() {
+  const container = document.getElementById('skill-graph-container');
+  if (!container) return;
+
+  const width = container.offsetWidth;
+  const height = container.offsetHeight;
+
+  const svg = d3.select('#skill-graph-container')
+    .append('svg')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .style('overflow', 'visible');
+
+  // Graph Data
+  const nodes = [
+    // 🟦 Category Hubs
+    { id: 'hub-tech', label: 'TECHNICAL SKILLS', cat: 'tech', type: 'hub', color: '3b82f6' },
+    { id: 'hub-ind', label: 'INDUSTRY KNOWLEDGE', cat: 'ind', type: 'hub', color: '10b981' },
+    { id: 'hub-tool', label: 'TOOLS & SOFTWARE', cat: 'tool', type: 'hub', color: 'eab308' },
+
+    // 🟦 Technical Skills (Blue)
+    { id: 'tech-cloud', label: 'Cloud Computing', cat: 'tech', icon: '☁️', color: '3b82f6' },
+    { id: 'tech-cicd', label: 'CI/CD Pipelines', cat: 'tech', icon: '🔄', color: '3b82f6' },
+    { id: 'tech-azure', label: 'Azure', cat: 'tech', icon: '☁️', color: '3b82f6' },
+    { id: 'tech-gha', label: 'GitHub Actions', cat: 'tech', icon: '🤖', color: '3b82f6' },
+    { id: 'tech-shell', label: 'Shell Scripting', cat: 'tech', icon: '🐚', color: '3b82f6' },
+    { id: 'tech-docker', label: 'Docker', cat: 'tech', icon: '🐳', color: '3b82f6' },
+    { id: 'tech-ci', label: 'Continuous Integration', cat: 'tech', icon: '🔁', color: '3b82f6' },
+
+    // 🟩 Industry Knowledge (Green)
+    { id: 'ind-cloud', label: 'Cloud Computing', cat: 'ind', icon: '🌐', color: '10b981' },
+    { id: 'ind-config', label: 'Configuration Management', cat: 'ind', icon: '⚙️', color: '10b981' },
+    { id: 'ind-agile', label: 'Agile Methodologies', cat: 'ind', icon: '🏃', color: '10b981' },
+    { id: 'ind-devops', label: 'DevOps Practices', cat: 'ind', icon: '🚀', color: '10b981' },
+
+    // 🟨 Tools & Software (Yellow)
+    { id: 'tool-tf', label: 'Terraform', cat: 'tool', icon: '🏗️', color: 'eab308' },
+    { id: 'tool-adv', label: 'Azure DevOps', cat: 'tool', icon: '♾️', color: 'eab308' },
+    { id: 'tool-jenkins', label: 'Jenkins', cat: 'tool', icon: '👨‍✈️', color: 'eab308' },
+    { id: 'tool-nginx', label: 'Nginx', cat: 'tool', icon: '🟢', color: 'eab308' },
+    { id: 'tool-dotnet', label: '.NET Core', cat: 'tool', icon: '⚡', color: 'eab308' },
+    { id: 'tool-angular', label: 'Angular', cat: 'tool', icon: '🅰️', color: 'eab308' },
+    { id: 'tool-sql', label: 'SQL Server', cat: 'tool', icon: '🗄️', color: 'eab308' },
+    { id: 'tool-azure', label: 'Microsoft Azure', cat: 'tool', icon: '☁️', color: 'eab308' },
+    { id: 'tool-docker', label: 'Docker', cat: 'tool', icon: '🐳', color: 'eab308' },
+  ];
+
+  const links = [
+    // Hub to Items
+    { source: 'hub-tech', target: 'tech-cloud' },
+    { source: 'hub-tech', target: 'tech-cicd' },
+    { source: 'hub-tech', target: 'tech-azure' },
+    { source: 'hub-tech', target: 'tech-gha' },
+    { source: 'hub-tech', target: 'tech-shell' },
+    { source: 'hub-tech', target: 'tech-docker' },
+    { source: 'hub-tech', target: 'tech-ci' },
+
+    { source: 'hub-ind', target: 'ind-cloud' },
+    { source: 'hub-ind', target: 'ind-config' },
+    { source: 'hub-ind', target: 'ind-agile' },
+    { source: 'hub-ind', target: 'ind-devops' },
+
+    { source: 'hub-tool', target: 'tool-tf' },
+    { source: 'hub-tool', target: 'tool-adv' },
+    { source: 'hub-tool', target: 'tool-jenkins' },
+    { source: 'hub-tool', target: 'tool-nginx' },
+    { source: 'hub-tool', target: 'tool-dotnet' },
+    { source: 'hub-tool', target: 'tool-angular' },
+    { source: 'hub-tool', target: 'tool-sql' },
+    { source: 'hub-tool', target: 'tool-azure' },
+    { source: 'hub-tool', target: 'tool-docker' },
+
+    // Cross-links
+    { source: 'tech-azure', target: 'tool-azure' },
+    { source: 'tech-docker', target: 'tool-docker' },
+    { source: 'tech-gha', target: 'tech-cicd' },
+    { source: 'ind-config', target: 'tool-tf' },
+  ];
+
+  // Simulation - Significantly increased spacing and repulsion
+  const simulation = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(130).strength(0.8))
+    .force('charge', d3.forceManyBody().strength(-1200)) // Stronger repulsion
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collide', d3.forceCollide().radius(d => d.type === 'hub' ? 140 : 85)) // Larger collision radius
+    .force('x', d3.forceX(width / 2).strength(0.2))
+    .force('y', d3.forceY(height / 2).strength(0.2));
+
+  // Render Links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(links)
+    .enter()
+    .append('line')
+    .attr('class', 'link-line');
+
+  // Render Nodes
+  const node = svg.append('g')
+    .selectAll('.node-pod')
+    .data(nodes)
+    .enter()
+    .append('g')
+    .attr('class', d => `node-pod ${d.type || ''}`)
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended));
+
+  node.each(function (d) {
+    const g = d3.select(this);
+    if (d.type === 'hub') {
+      // Background box for Hubs as requested
+      const hubLabelWidth = d.label.length * 9.5 + 30;
+      const hubHeight = 44;
+
+      g.append('rect')
+        .attr('class', 'hub-bg-box')
+        .attr('width', hubLabelWidth)
+        .attr('height', hubHeight)
+        .attr('x', -hubLabelWidth / 2)
+        .attr('y', -hubHeight / 2)
+        .attr('rx', 12)
+        .attr('ry', 12)
+        .style('fill', 'rgba(15, 23, 42, 0.4)') // Semi-transparent as requested
+        .style('stroke', `#${d.color}`)
+        .style('stroke-width', '2px')
+        .style('backdrop-filter', 'blur(10px)');
+
+      g.append('text')
+        .attr('class', 'node-category-label hub-text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .style('fill', `#${d.color}`)
+        .style('font-size', '15px')
+        .style('font-weight', '800')
+        .text(d.label);
+    } else {
+      const labelWidth = d.label.length * 8 + 55;
+      const height = 36;
+
+      g.append('rect')
+        .attr('class', `node-glow ${d.cat}`)
+        .attr('width', labelWidth + 4)
+        .attr('height', height + 4)
+        .attr('x', -(labelWidth + 4) / 2)
+        .attr('y', -(height + 4) / 2)
+        .attr('rx', 20)
+        .attr('ry', 20)
+        .style('opacity', 0);
+
+      g.append('rect')
+        .attr('class', `node-rect ${d.cat}`)
+        .attr('width', labelWidth)
+        .attr('height', height)
+        .attr('x', -labelWidth / 2)
+        .attr('y', -height / 2)
+        .attr('rx', 18)
+        .attr('ry', 18);
+
+      g.append('text')
+        .attr('class', 'node-icon-emoji')
+        .attr('dominant-baseline', 'central')
+        .attr('text-anchor', 'middle')
+        .attr('x', -labelWidth / 2 + 20)
+        .attr('y', 0)
+        .style('font-size', '16px')
+        .text(d.icon);
+
+      g.append('text')
+        .attr('class', 'node-text')
+        .attr('dominant-baseline', 'central')
+        .attr('x', -labelWidth / 2 + 38)
+        .attr('y', 0)
+        .text(d.label);
+    }
+  });
+
+  // State Management
+  let selectedCat = null;
+
+  function updateVisuals() {
+    if (!selectedCat) {
+      node.style('opacity', 1).classed('faded', false);
+      link.classed('active', false).style('opacity', 0.4);
+      node.selectAll('.node-glow').style('opacity', 0);
+      return;
+    }
+
+    node.classed('faded', d => d.cat !== selectedCat && d.type !== 'hub');
+    node.style('opacity', d => (d.cat === selectedCat || d.id === `hub-${selectedCat}`) ? 1 : 0.2);
+
+    link.classed('active', l =>
+      (l.source.cat === selectedCat || l.source.id === `hub-${selectedCat}`) &&
+      (l.target.cat === selectedCat || l.target.id === `hub-${selectedCat}`)
+    ).style('opacity', function (l) {
+      return d3.select(this).classed('active') ? 0.8 : 0.05;
+    });
+
+    node.each(function (d) {
+      if (d.cat === selectedCat && d.type !== 'hub') {
+        d3.select(this).select('.node-glow').style('opacity', 0.6);
+      } else {
+        d3.select(this).select('.node-glow').style('opacity', 0);
+      }
+    });
+  }
+
+  // Interactivity
+  node.on('click', (event, d) => {
+    event.stopPropagation();
+    if (d.type === 'hub') {
+      selectedCat = (selectedCat === d.cat) ? null : d.cat;
+    } else {
+      selectedCat = d.cat;
+    }
+    updateVisuals();
+  });
+
+  svg.on('click', () => {
+    selectedCat = null;
+    updateVisuals();
+  });
+
+  node.on('mouseenter', (event, d) => {
+    if (selectedCat) return;
+    link.classed('active', l => l.source.id === d.id || l.target.id === d.id);
+    d3.select(event.currentTarget).select('.node-glow').style('opacity', 0.6);
+  }).on('mouseleave', (event, d) => {
+    if (selectedCat) return;
+    link.classed('active', false);
+    d3.select(event.currentTarget).select('.node-glow').style('opacity', 0);
+  });
+
+  // Initial State: Highlight all hubs briefly or maintain neutral?
+  // The user said "Initially highlight these 3". I'll add a class to hubs initially.
+  node.filter(d => d.type === 'hub').classed('initial-highlight', true);
+
+  // Tick Function
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+
+  function dragstarted(event) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    event.subject.fx = event.subject.x;
+    event.subject.fy = event.subject.y;
+  }
+
+  function dragged(event) {
+    event.subject.fx = event.x;
+    event.subject.fy = event.y;
+  }
+
+  function dragended(event) {
+    if (!event.active) simulation.alphaTarget(0);
+    event.subject.fx = null;
+    event.subject.fy = null;
+  }
+
+  window.addEventListener('resize', () => {
+    const newWidth = container.offsetWidth;
+    const newHeight = container.offsetHeight;
+    if (newWidth === 0 || newHeight === 0) return;
+    svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
+    simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 2));
+    simulation.alpha(0.3).restart();
+  });
+}
 
 /* ══════════════════════════════════════════
    1. HERO CANVAS — particle network
@@ -42,11 +323,11 @@ function initCanvas() {
   class Particle {
     constructor() { this.reset(); }
     reset() {
-      this.x  = Math.random() * W;
-      this.y  = Math.random() * H;
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
       this.vx = (Math.random() - 0.5) * 0.45;
       this.vy = (Math.random() - 0.5) * 0.45;
-      this.r  = Math.random() * 2 + 1.2;
+      this.r = Math.random() * 2 + 1.2;
       this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
       this.alpha = Math.random() * 0.6 + 0.3;
     }
@@ -69,10 +350,10 @@ function initCanvas() {
       if (speed > 1.2) { this.vx = this.vx / speed * 1.2; this.vy = this.vy / speed * 1.2; }
 
       // Wrap edges
-      if (this.x < 0)  this.x = W;
-      if (this.x > W)  this.x = 0;
-      if (this.y < 0)  this.y = H;
-      if (this.y > H)  this.y = 0;
+      if (this.x < 0) this.x = W;
+      if (this.x > W) this.x = 0;
+      if (this.y < 0) this.y = H;
+      if (this.y > H) this.y = 0;
     }
     draw() {
       ctx.save();
@@ -86,7 +367,7 @@ function initCanvas() {
   }
 
   function resize() {
-    W = canvas.width  = canvas.offsetWidth;
+    W = canvas.width = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
   }
 
@@ -95,7 +376,7 @@ function initCanvas() {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
-        const d  = Math.sqrt(dx * dx + dy * dy);
+        const d = Math.sqrt(dx * dx + dy * dy);
         if (d < MAX_DIST) {
           const alpha = (1 - d / MAX_DIST) * 0.25;
           ctx.save();
@@ -210,7 +491,7 @@ function initTyped() {
    4. TERMINAL ANIMATION
 ══════════════════════════════════════════ */
 function initTerminal() {
-  const cmdEl    = document.getElementById('terminal-cmd');
+  const cmdEl = document.getElementById('terminal-cmd');
   const outputEl = document.getElementById('terminal-output');
   if (!cmdEl || !outputEl) return;
 
@@ -391,7 +672,7 @@ function initSkillBars() {
    8. HAMBURGER MOBILE MENU
 ══════════════════════════════════════════ */
 function initHamburger() {
-  const btn   = document.getElementById('hamburger');
+  const btn = document.getElementById('hamburger');
   const links = document.getElementById('nav-links');
   if (!btn || !links) return;
 
@@ -423,7 +704,7 @@ function initHamburger() {
    9. CONTACT FORM
 ══════════════════════════════════════════ */
 function initContactForm() {
-  const form      = document.getElementById('contact-form');
+  const form = document.getElementById('contact-form');
   const successEl = document.getElementById('form-success');
   const submitBtn = document.getElementById('form-submit-btn');
   if (!form) return;
