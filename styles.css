@@ -277,14 +277,14 @@ ul {
     display: inline-block;
   }
 
-  .mobile-category-title.tech { color: #3b82f6; }
-  .mobile-category-title.tech::before { background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+  .mobile-category-card.tech .mobile-category-title { color: #3b82f6; }
+  .mobile-category-card.tech .mobile-category-title::before { background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
   
-  .mobile-category-title.tool { color: #eab308; }
-  .mobile-category-title.tool::before { background: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.5); }
+  .mobile-category-card.tool .mobile-category-title { color: #eab308; }
+  .mobile-category-card.tool .mobile-category-title::before { background: #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.5); }
   
-  .mobile-category-title.ind { color: #10b981; }
-  .mobile-category-title.ind::before { background: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+  .mobile-category-card.ind .mobile-category-title { color: #10b981; }
+  .mobile-category-card.ind .mobile-category-title::before { background: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
   
   .mobile-skill-list {
     display: grid;
