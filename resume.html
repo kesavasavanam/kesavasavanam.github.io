@@ -9,13 +9,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --accent: #6366f1;
-      --accent2: #8b5cf6;
-      --text: #1e293b;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --bg: #ffffff;
-      --tag-bg: #f1f5f9;
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --bg: #080c1a;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.3);
     }
 
     body {
@@ -39,7 +41,7 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 24px;
-      border-bottom: 2px solid var(--accent);
+      border-bottom: 2px solid var(--border-accent);
       padding-bottom: 20px;
       margin-bottom: 28px;
     }
@@ -48,7 +50,7 @@
       font-size: 28px;
       font-weight: 700;
       letter-spacing: -0.5px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background: linear-gradient(135deg, #fff 40%, var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -57,7 +59,7 @@
     .header-left .role {
       font-size: 14px;
       font-weight: 500;
-      color: var(--muted);
+      color: var(--accent);
       margin-top: 4px;
       font-family: 'JetBrains Mono', monospace;
     }
@@ -65,7 +67,7 @@
     .header-right {
       text-align: right;
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-muted);
       line-height: 1.9;
     }
 
@@ -73,6 +75,8 @@
       color: var(--accent);
       text-decoration: none;
     }
+
+    .header-right a:hover { text-decoration: underline; }
 
     /* ── Sections ── */
     .section {
@@ -100,14 +104,22 @@
 
     /* ── Summary ── */
     .summary p {
-      color: #334155;
+      color: var(--text-muted);
       font-size: 13px;
       line-height: 1.7;
+    }
+
+    .summary strong {
+      color: var(--text);
     }
 
     /* ── Experience ── */
     .exp-item {
       margin-bottom: 20px;
+      padding: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
     }
 
     .exp-header {
@@ -131,7 +143,7 @@
 
     .exp-period {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-dim);
       font-family: 'JetBrains Mono', monospace;
       white-space: nowrap;
     }
@@ -143,12 +155,16 @@
 
     .exp-item ul li {
       font-size: 12.5px;
-      color: #334155;
+      color: var(--text-muted);
       margin-bottom: 4px;
     }
 
     .exp-item ul li::marker {
       color: var(--accent);
+    }
+
+    .exp-item strong {
+      color: var(--text);
     }
 
     /* ── Skills ── */
@@ -159,7 +175,8 @@
     }
 
     .skill-group {
-      background: var(--tag-bg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px 14px;
     }
@@ -175,12 +192,16 @@
 
     .skill-group p {
       font-size: 12px;
-      color: #334155;
+      color: var(--text-muted);
     }
 
     /* ── Projects ── */
     .project-item {
       margin-bottom: 14px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
     }
 
     .project-name {
@@ -191,39 +212,19 @@
 
     .project-name span {
       font-weight: 400;
-      color: var(--muted);
+      color: var(--text-dim);
       font-size: 12px;
       margin-left: 6px;
     }
 
     .project-desc {
       font-size: 12.5px;
-      color: #334155;
+      color: var(--text-muted);
       margin-top: 3px;
     }
 
-    /* ── Certifications ── */
-    .cert-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .cert-badge {
-      background: var(--tag-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 500;
+    .project-item strong {
       color: var(--text);
-    }
-
-    .cert-badge .issuer {
-      color: var(--muted);
-      font-weight: 400;
-      font-size: 11px;
-      display: block;
     }
 
     /* ── Education ── */
@@ -233,21 +234,26 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 4px;
+      padding: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
     }
 
     .edu-deg {
       font-weight: 600;
       font-size: 13px;
+      color: var(--text);
     }
 
     .edu-school {
-      color: var(--muted);
+      color: var(--text-dim);
       font-size: 12px;
     }
 
     .edu-year {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-dim);
       font-family: 'JetBrains Mono', monospace;
     }
 
@@ -257,20 +263,32 @@
       .header { flex-direction: column; gap: 12px; }
       .header-right { text-align: left; }
       .skills-grid { grid-template-columns: 1fr; }
-      .cert-list { flex-direction: column; }
       .exp-header { flex-direction: column; gap: 2px; }
     }
 
     @media print {
-      body { font-size: 12px; }
+      :root {
+        --accent: #6366f1;
+        --accent2: #8b5cf6;
+        --bg: #ffffff;
+        --bg-card: #f8fafc;
+        --text: #1e293b;
+        --text-muted: #475569;
+        --text-dim: #64748b;
+        --border: #e2e8f0;
+        --border-accent: #6366f1;
+      }
+      body { font-size: 12px; background: #fff; color: #1e293b; }
       .page { padding: 32px 40px; max-width: 100%; }
       a { color: var(--accent) !important; text-decoration: none; }
+      .download-bar { display: none; }
+      .exp-item, .project-item, .edu-item, .skill-group { border-color: #e2e8f0; background: #f8fafc; }
     }
 
     /* ── Download bar (screen only) ── */
     .download-bar {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: #fff;
+      background: linear-gradient(135deg, #080c1a 0%, #1a1060 100%);
+      color: var(--text);
       text-align: center;
       padding: 12px;
       font-size: 13px;
@@ -282,23 +300,24 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
     .download-bar a {
-      background: #fff;
-      color: #6366f1;
-      border-radius: 6px;
-      padding: 4px 14px;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 6px 16px;
       font-weight: 600;
       text-decoration: none;
       font-size: 12px;
-      transition: opacity 0.2s;
+      transition: all 0.2s;
+      background: transparent;
     }
 
-    .download-bar a:hover { opacity: 0.85; }
-
-    @media print {
-      .download-bar { display: none; }
+    .download-bar a:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--accent);
     }
   </style>
 </head>
@@ -317,7 +336,7 @@
     <header class="header">
       <div class="header-left">
         <h1>Kesavareddy</h1>
-        <p class="role">// DevOps Engineer &amp; Cloud Infrastructure Specialist</p>
+        <p class="role">// DevOps Engineer & Cloud Infrastructure Specialist</p>
       </div>
       <div class="header-right">
         <div>📍 India &nbsp;·&nbsp; Open to Remote / On-site</div>
@@ -331,11 +350,11 @@
     <section class="section summary">
       <h2 class="section-title">Professional Summary</h2>
       <p>
-        Results-driven <strong>Senior DevOps Engineer</strong> with 4+ years of experience architecting scalable cloud infrastructure on <strong>Azure</strong>
-        and engineering robust CI/CD pipelines using <strong>GitHub Actions</strong> and <strong>Azure DevOps</strong>.
-        Deep expertise in automated build and release processes, <strong>Infrastructure as Code</strong> (Terraform, Bicep),
-        and container orchestration (Docker, AKS). Proven track record of accelerating software delivery, embedding secure DevOps practices,
-        and implementing comprehensive monitoring strategies to achieve 99.9%+ availability across production systems.
+        Hi, I'm <strong>Kesava</strong> — a passionate <strong>DevOps Engineer</strong> with 3+ years of experience
+        architecting scalable cloud infrastructure on <strong>Azure</strong> and engineering robust CI/CD pipelines
+        using <strong>GitHub Actions</strong> and <strong>Azure DevOps</strong>. Specialized in
+        <strong>container orchestration</strong> (Docker, Kubernetes), Infrastructure as Code (Terraform),
+        and automated deployment strategies. I love turning complex deployments into one-click operations.
       </p>
     </section>
 
@@ -352,7 +371,7 @@
           <span class="exp-period">Feb 2025 – Present &nbsp;·&nbsp; Full-time</span>
         </div>
         <ul>
-          <li><strong>Architected and managed</strong> highly available cloud infrastructure natively on <strong>Azure</strong>, ensuring 99.9% uptime for business-critical applications.</li>
+          <li><strong>Architected and managed</strong> highly available cloud infrastructure natively on <strong>Azure</strong>, ensuring high uptime for business-critical applications.</li>
           <li><strong>Spearheaded</strong> initial <strong>Kubernetes</strong> cluster setups and microservice orchestration, vastly improving platform scalability and resource efficiency.</li>
           <li><strong>Engineered</strong> end-to-end CI/CD pipelines utilizing <strong>GitHub Actions</strong>, fully automating the build, testing, and zero-downtime deployment of full-stack apps.</li>
           <li><strong>Automated</strong> infrastructure provisioning and robust cloud deployments using centralized Infrastructure as Code (IaC) principles.</li>
@@ -419,7 +438,7 @@
 
       <div class="project-item">
         <div class="project-name">TimeChamp – Massive Scale Employee Monitoring Platform <span>— GitHub Actions · PowerShell · SQL Server · On-Premises</span></div>
-        <ul style="margin-top: 0.5rem; color: #4b5563; line-height: 1.6;">
+        <ul style="margin-top: 0.5rem; line-height: 1.6;">
           <li><strong>Architected</strong> secure, decoupled CI/CD deployment pipelines automating releases into highly restricted, air-gapped on-premises data centers via self-hosted runners.</li>
           <li><strong>Engineered</strong> fully unattended build, test, and release automation via <strong>PowerShell</strong>, slashing deployment times by <strong>98%</strong> (from 8 hours to 10 mins).</li>
           <li><strong>Established</strong> a resilient local observability stack leveraging <strong>Prometheus & Grafana</strong> to define strict SLIs/SLOs across hundreds of physical edge nodes.</li>
@@ -429,16 +448,16 @@
 
       <div class="project-item">
         <div class="project-name">Smart Truck Network – Highly Available Logistics Telemetry <span>— Azure · Azure DevOps · Microservices</span></div>
-        <ul style="margin-top: 0.5rem; color: #4b5563; line-height: 1.6;">
+        <ul style="margin-top: 0.5rem; line-height: 1.6;">
           <li><strong>Designed</strong> the DevOps infrastructure for a geospatial logistics platform on <strong>Azure</strong>, enabling synchronous, real-time tracking telemetry ingestion from thousands of active transport assets.</li>
-          <li><strong>Orchestrated</strong> bulletproof Blue/Green deployment strategies via <strong>Azure App Service slots</strong> and dynamic traffic distribution, guaranteeing <strong>99.99% system availability</strong> during peak traffic.</li>
+          <li><strong>Orchestrated</strong> bulletproof Blue/Green deployment strategies via <strong>Azure App Service slots</strong> and dynamic traffic distribution.</li>
           <li><strong>Standardized</strong> provisioning via Infrastructure as Code (IaC) and fortified operational security by systematically injecting runtime secrets through <strong>Azure Key Vault</strong>.</li>
         </ul>
       </div>
 
       <div class="project-item">
         <div class="project-name">Krafted.Store – High-Volume Cloud E-commerce <span>— GitHub Actions · Angular · .NET Core · DevSecOps</span></div>
-        <ul style="margin-top: 0.5rem; color: #4b5563; line-height: 1.6;">
+        <ul style="margin-top: 0.5rem; line-height: 1.6;">
           <li><strong>Engineered</strong> highly parallelized CI/CD streams via <strong>GitHub Actions</strong>, decoupling the monolithic deployment process into specialized rapid-release frontend and backend pathways.</li>
           <li><strong>Shifted-left</strong> platform security by baking automated SAST analysis aggressively into the pull request cycle, mitigating critical vulnerabilities prior to main branch merges.</li>
           <li><strong>Optimized</strong> artifact caching logic, directly decreasing cycle times by <strong>40%</strong> and enabling multiple on-demand daily deployments.</li>
@@ -446,17 +465,15 @@
       </div>
     </section>
 
-
-
     <!-- ══ EDUCATION ══ -->
     <section class="section">
       <h2 class="section-title">Education</h2>
       <div class="edu-item">
         <div>
-          <div class="edu-deg">Bachelor of Technology – Computer Science &amp; Engineering</div>
-          <div class="edu-school">University, India</div>
+          <div class="edu-deg">B.Tech – Computer Science & Engineering</div>
+          <div class="edu-school">St. Ann's College of Engineering and Technology &nbsp;·&nbsp; GPA: 7.37</div>
         </div>
-        <span class="edu-year">2017 – 2021</span>
+        <span class="edu-year">2019 – 2023</span>
       </div>
     </section>
 
