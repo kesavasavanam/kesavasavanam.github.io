@@ -15,6 +15,20 @@
 
 // ─── Wait for DOM ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Request fullscreen on page load
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen().catch(err => {
+      console.log(`Fullscreen request failed: ${err.message}`);
+    });
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.mozRequestFullScreen) {
+    elem.mozRequestFullScreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+
   initCanvas();
   initNavbar();
   initTyped();
@@ -111,13 +125,14 @@ function initSkillGraph() {
   ];
 
   // Simulation - Significantly increased spacing and repulsion
+  const pad = 80; // padding from edges
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(130).strength(0.8))
-    .force('charge', d3.forceManyBody().strength(-1200)) // Stronger repulsion
+    .force('link', d3.forceLink(links).id(d => d.id).distance(95).strength(0.9)) 
+    .force('charge', d3.forceManyBody().strength(-450)) 
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collide', d3.forceCollide().radius(d => d.type === 'hub' ? 140 : 85)) // Larger collision radius
-    .force('x', d3.forceX(width / 2).strength(0.2))
-    .force('y', d3.forceY(height / 2).strength(0.2));
+    .force('collide', d3.forceCollide().radius(d => d.type === 'hub' ? 100 : 70).strength(1)) 
+    .force('x', d3.forceX(width / 2).strength(0.35))
+    .force('y', d3.forceY(height / 2).strength(0.35));
 
   // Render Links
   const link = svg.append('g')
@@ -139,12 +154,15 @@ function initSkillGraph() {
       .on('drag', dragged)
       .on('end', dragended));
 
-  node.each(function (d) {
+  // Add sub-container for scaling to avoid translate conflicts
+  const nodeContent = node.append('g').attr('class', 'pod-content');
+
+  nodeContent.each(function (d) {
     const g = d3.select(this);
     if (d.type === 'hub') {
       // Background box for Hubs as requested
-      const hubLabelWidth = d.label.length * 9.5 + 30;
-      const hubHeight = 44;
+      const hubLabelWidth = d.label.length * 7.5 + 24;
+      const hubHeight = 32;
 
       g.append('rect')
         .attr('class', 'hub-bg-box')
@@ -152,9 +170,9 @@ function initSkillGraph() {
         .attr('height', hubHeight)
         .attr('x', -hubLabelWidth / 2)
         .attr('y', -hubHeight / 2)
-        .attr('rx', 12)
-        .attr('ry', 12)
-        .style('fill', 'rgba(15, 23, 42, 0.4)') // Semi-transparent as requested
+        .attr('rx', 10)
+        .attr('ry', 10)
+        .style('fill', 'rgba(15, 23, 42, 0.4)') 
         .style('stroke', `#${d.color}`)
         .style('stroke-width', '2px')
         .style('backdrop-filter', 'blur(10px)');
@@ -164,12 +182,12 @@ function initSkillGraph() {
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
         .style('fill', `#${d.color}`)
-        .style('font-size', '15px')
-        .style('font-weight', '800')
+        .style('font-size', '12.5px')
+        .style('font-weight', '900')
         .text(d.label);
     } else {
-      const labelWidth = d.label.length * 8 + 55;
-      const height = 36;
+      const labelWidth = d.label.length * 6 + 40;
+      const height = 22;
 
       g.append('rect')
         .attr('class', `node-glow ${d.cat}`)
@@ -177,8 +195,8 @@ function initSkillGraph() {
         .attr('height', height + 4)
         .attr('x', -(labelWidth + 4) / 2)
         .attr('y', -(height + 4) / 2)
-        .attr('rx', 20)
-        .attr('ry', 20)
+        .attr('rx', 12)
+        .attr('ry', 12)
         .style('opacity', 0);
 
       g.append('rect')
@@ -187,22 +205,22 @@ function initSkillGraph() {
         .attr('height', height)
         .attr('x', -labelWidth / 2)
         .attr('y', -height / 2)
-        .attr('rx', 18)
-        .attr('ry', 18);
+        .attr('rx', 11)
+        .attr('ry', 11);
 
       g.append('text')
         .attr('class', 'node-icon-emoji')
         .attr('dominant-baseline', 'central')
         .attr('text-anchor', 'middle')
-        .attr('x', -labelWidth / 2 + 20)
+        .attr('x', -labelWidth / 2 + 16)
         .attr('y', 0)
-        .style('font-size', '16px')
+        .style('font-size', '13px')
         .text(d.icon);
 
       g.append('text')
         .attr('class', 'node-text')
         .attr('dominant-baseline', 'central')
-        .attr('x', -labelWidth / 2 + 38)
+        .attr('x', -labelWidth / 2 + 28)
         .attr('y', 0)
         .text(d.label);
     }
@@ -230,10 +248,20 @@ function initSkillGraph() {
     });
 
     node.each(function (d) {
+      const content = d3.select(this).select('.pod-content');
       if (d.cat === selectedCat && d.type !== 'hub') {
-        d3.select(this).select('.node-glow').style('opacity', 0.6);
+        d3.select(this).select('.node-glow').style('opacity', 0.8);
+        content.style('transform', 'scale(1.1)');
       } else {
         d3.select(this).select('.node-glow').style('opacity', 0);
+        content.style('transform', 'scale(1)');
+      }
+      if (d.id === `hub-${selectedCat}`) {
+         content.style('transform', 'scale(1.2)');
+         d3.select(this).select('.hub-bg-box').style('stroke-width', '3px');
+      } else if (d.type === 'hub') {
+         content.style('transform', 'scale(1)');
+         d3.select(this).select('.hub-bg-box').style('stroke-width', '2px');
       }
     });
   }
@@ -270,6 +298,12 @@ function initSkillGraph() {
 
   // Tick Function
   simulation.on('tick', () => {
+    // Clamp nodes within bounds
+    nodes.forEach(d => {
+      d.x = Math.max(pad, Math.min(width - pad, d.x));
+      d.y = Math.max(pad, Math.min(height - pad, d.y));
+    });
+
     link
       .attr('x1', d => d.source.x)
       .attr('y1', d => d.source.y)
@@ -497,46 +531,37 @@ function initTerminal() {
 
   const sessions = [
     {
-      cmd: 'kubectl get pods -n production',
-      output: `NAME                          READY   STATUS
-api-deployment-7d4f9-kx2p8    2/2     Running
-db-statefulset-0              1/1     Running
-cache-deployment-5bc9-rqz4t   1/1     Running
-worker-job-8bm9w              1/1     Running
-[4/4 running] ✓ All healthy`,
+      cmd: 'kubectl rollout status deployment/api -n prod',
+      output: `deployment "api" successfully rolled out
+Replicas: 5/5 ready | CPU: 45% | Memory: 62%
+✓ Zero-downtime deployment complete in 2m 34s`,
       color: '#10b981'
     },
     {
-      cmd: 'terraform apply -auto-approve',
-      output: `Plan: 3 to add, 2 to change, 0 to destroy.
-
-Apply complete!
-  + aws_eks_cluster.main
-  + aws_rds_instance.db
-  ~ aws_security_group.ingress
-
-Apply complete! Resources: 3 added, 2 changed.`,
+      cmd: 'terraform plan -out=tfplan && terraform apply tfplan',
+      output: `Plan: 12 to add, 3 to change, 0 to destroy.
+Applying state changes...
+✓ Infrastructure provisioned in 3m 12s
+✓ All security policies enforced
+✓ Monitoring & alerts configured`,
       color: '#6366f1'
     },
     {
-      cmd: 'helm upgrade --install myapp ./chart',
-      output: `Release "myapp" has been upgraded. Happy helming!
-NAME: myapp
-LAST DEPLOYED: $(date)
-NAMESPACE: default
-STATUS: deployed
-REVISION: 7 ✓`,
+      cmd: 'helm upgrade --install kesava ./chart --wait',
+      output: `Release "kesava" has been upgraded.
+✓ Deployment ready (5/5 pods running)
+✓ Service endpoints healthy
+✓ Ingress configured with TLS
+✓ Rollback available`,
       color: '#06b6d4'
     },
     {
-      cmd: 'docker build -t kesava/app:latest .',
-      output: `[+] Building 4.2s (12/12) FINISHED
- => [internal] load build context     0.1s
- => [1/5] FROM node:18-alpine         0.0s
- => [2/5] WORKDIR /app                0.0s
- => [5/5] RUN npm run build           3.2s
- => exporting to image                0.3s
-Successfully built image ✓`,
+      cmd: 'docker build --platform linux/amd64 -t kesava/devops:v2.1 .',
+      output: `[+] Building 2.8s (14/14) FINISHED
+✓ Multi-stage build optimized
+✓ Image size: 145MB (45% reduction)
+✓ Security scan: 0 vulnerabilities
+✓ Pushed to registry in 1.2s`,
       color: '#f59e0b'
     }
   ];
