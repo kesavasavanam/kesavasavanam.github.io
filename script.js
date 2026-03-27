@@ -230,20 +230,29 @@ function initSkillGraph() {
   let selectedCat = null;
 
   function updateVisuals() {
+    // Update nav buttons
+    d3.selectAll('.graph-nav-btn').classed('active', function() {
+      return d3.select(this).attr('data-cat') === (selectedCat || 'all');
+    });
+
     if (!selectedCat) {
-      node.style('opacity', 1).classed('faded', false);
-      link.classed('active', false).style('opacity', 0.4);
+      node.style('opacity', 1).classed('faded', false).classed('hidden-node', false);
+      link.classed('active', false).style('opacity', 0.4).classed('hidden-node', false);
       node.selectAll('.node-glow').style('opacity', 0);
+      simulation.alpha(0.3).restart();
       return;
     }
 
     node.classed('faded', d => d.cat !== selectedCat && d.type !== 'hub');
+    node.classed('hidden-node', d => d.cat !== selectedCat && d.id !== `hub-${selectedCat}`);
     node.style('opacity', d => (d.cat === selectedCat || d.id === `hub-${selectedCat}`) ? 1 : 0.2);
 
     link.classed('active', l =>
       (l.source.cat === selectedCat || l.source.id === `hub-${selectedCat}`) &&
       (l.target.cat === selectedCat || l.target.id === `hub-${selectedCat}`)
-    ).style('opacity', function (l) {
+    ).classed('hidden-node', function(l) {
+      return !d3.select(this).classed('active');
+    }).style('opacity', function (l) {
       return d3.select(this).classed('active') ? 0.8 : 0.05;
     });
 
@@ -264,7 +273,17 @@ function initSkillGraph() {
          d3.select(this).select('.hub-bg-box').style('stroke-width', '2px');
       }
     });
+
+    // Re-heat simulation to pack nodes better when filtered
+    simulation.alpha(0.3).restart();
   }
+
+  // Handle external nav buttons
+  d3.selectAll('.graph-nav-btn').on('click', function() {
+    const cat = d3.select(this).attr('data-cat');
+    selectedCat = (cat === 'all') ? null : cat;
+    updateVisuals();
+  });
 
   // Interactivity
   node.on('click', (event, d) => {
