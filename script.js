@@ -76,9 +76,13 @@ function initSkillGraph() {
 
     // 🟩 Industry Knowledge (Green)
     { id: 'ind-cloud', label: 'Cloud Computing', cat: 'ind', icon: '🌐', color: '10b981' },
-    { id: 'ind-config', label: 'Configuration Management', cat: 'ind', icon: '⚙️', color: '10b981' },
-    { id: 'ind-agile', label: 'Agile Methodologies', cat: 'ind', icon: '🏃', color: '10b981' },
+    { id: 'ind-config', label: 'Config Management', cat: 'ind', icon: '⚙️', color: '10b981' },
+    { id: 'ind-iac', label: 'IaC Principles', cat: 'ind', icon: '🏗️', color: '10b981' },
     { id: 'ind-devops', label: 'DevOps Practices', cat: 'ind', icon: '🚀', color: '10b981' },
+    { id: 'ind-sec', label: 'DevSecOps', cat: 'ind', icon: '🛡️', color: '10b981' },
+    { id: 'ind-sre', label: 'SRE Principles', cat: 'ind', icon: '⚖️', color: '10b981' },
+    { id: 'ind-micro', label: 'Microservices', cat: 'ind', icon: '🧩', color: '10b981' },
+    { id: 'ind-agile', label: 'Agile', cat: 'ind', icon: '🏃', color: '10b981' },
 
     // 🟨 Tools & Software (Yellow)
     { id: 'tool-tf', label: 'Terraform', cat: 'tool', icon: '🏗️', color: 'eab308' },
@@ -104,8 +108,12 @@ function initSkillGraph() {
 
     { source: 'hub-ind', target: 'ind-cloud' },
     { source: 'hub-ind', target: 'ind-config' },
-    { source: 'hub-ind', target: 'ind-agile' },
+    { source: 'hub-ind', target: 'ind-iac' },
     { source: 'hub-ind', target: 'ind-devops' },
+    { source: 'hub-ind', target: 'ind-sec' },
+    { source: 'hub-ind', target: 'ind-sre' },
+    { source: 'hub-ind', target: 'ind-micro' },
+    { source: 'hub-ind', target: 'ind-agile' },
 
     { source: 'hub-tool', target: 'tool-tf' },
     { source: 'hub-tool', target: 'tool-adv' },
