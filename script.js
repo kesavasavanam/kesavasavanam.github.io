@@ -61,75 +61,73 @@ function initSkillGraph() {
   // Graph Data
   const nodes = [
     // 🟦 Category Hubs
-    { id: 'hub-tech', label: 'TECHNICAL SKILLS', cat: 'tech', type: 'hub', color: '3b82f6' },
-    { id: 'hub-ind', label: 'INDUSTRY KNOWLEDGE', cat: 'ind', type: 'hub', color: '10b981' },
-    { id: 'hub-tool', label: 'TOOLS & SOFTWARE', cat: 'tool', type: 'hub', color: 'eab308' },
+    { id: 'hub-tech', label: 'BACKEND & FRAMEWORKS', cat: 'tech', type: 'hub', color: '3b82f6' },
+    { id: 'hub-tool', label: 'FRONTEND & WEB', cat: 'tool', type: 'hub', color: '10b981' },
+    { id: 'hub-ind', label: 'DEVOPS & TOOLS', cat: 'ind', type: 'hub', color: 'eab308' },
 
-    // 🟦 Technical Skills (Blue)
-    { id: 'tech-cloud', label: 'Cloud Computing', cat: 'tech', icon: '☁️', color: '3b82f6' },
-    { id: 'tech-cicd', label: 'CI/CD Pipelines', cat: 'tech', icon: '🔄', color: '3b82f6' },
-    { id: 'tech-azure', label: 'Azure', cat: 'tech', icon: '☁️', color: '3b82f6' },
-    { id: 'tech-gha', label: 'GitHub Actions', cat: 'tech', icon: '🤖', color: '3b82f6' },
-    { id: 'tech-shell', label: 'Shell Scripting', cat: 'tech', icon: '🐚', color: '3b82f6' },
-    { id: 'tech-docker', label: 'Docker', cat: 'tech', icon: '🐳', color: '3b82f6' },
-    { id: 'tech-ci', label: 'Continuous Integration', cat: 'tech', icon: '🔁', color: '3b82f6' },
+    // 🟦 Backend & Frameworks (Blue)
+    { id: 'tech-aspnet', label: 'ASP.NET Core', cat: 'tech', icon: '⚡', color: '3b82f6' },
+    { id: 'tech-csharp', label: 'C#', cat: 'tech', icon: '🔷', color: '3b82f6' },
+    { id: 'tech-webapi', label: '.NET Core Web API', cat: 'tech', icon: '🌐', color: '3b82f6' },
+    { id: 'tech-sql', label: 'SQL Server', cat: 'tech', icon: '🗄️', color: '3b82f6' },
+    { id: 'tech-sp', label: 'Stored Procedures', cat: 'tech', icon: '📦', color: '3b82f6' },
+    { id: 'tech-ef', label: 'Entity Framework', cat: 'tech', icon: '🔗', color: '3b82f6' },
+    { id: 'tech-rest', label: 'REST API Dev', cat: 'tech', icon: '🔌', color: '3b82f6' },
 
-    // 🟩 Industry Knowledge (Green)
-    { id: 'ind-cloud', label: 'Cloud Computing', cat: 'ind', icon: '🌐', color: '10b981' },
-    { id: 'ind-config', label: 'Config Management', cat: 'ind', icon: '⚙️', color: '10b981' },
-    { id: 'ind-iac', label: 'IaC Principles', cat: 'ind', icon: '🏗️', color: '10b981' },
-    { id: 'ind-devops', label: 'DevOps Practices', cat: 'ind', icon: '🚀', color: '10b981' },
-    { id: 'ind-sec', label: 'DevSecOps', cat: 'ind', icon: '🛡️', color: '10b981' },
-    { id: 'ind-sre', label: 'SRE Principles', cat: 'ind', icon: '⚖️', color: '10b981' },
-    { id: 'ind-micro', label: 'Microservices', cat: 'ind', icon: '🧩', color: '10b981' },
-    { id: 'ind-agile', label: 'Agile', cat: 'ind', icon: '🏃', color: '10b981' },
+    // 🟩 Frontend & Web (Green)
+    { id: 'tool-html', label: 'HTML5', cat: 'tool', icon: '📄', color: '10b981' },
+    { id: 'tool-css', label: 'CSS3', cat: 'tool', icon: '🎨', color: '10b981' },
+    { id: 'tool-js', label: 'JavaScript', cat: 'tool', icon: '⚙️', color: '10b981' },
+    { id: 'tool-angular', label: 'Angular', cat: 'tool', icon: '🅰️', color: '10b981' },
+    { id: 'tool-jwt', label: 'JWT', cat: 'tool', icon: '🔐', color: '10b981' },
+    { id: 'tool-okta', label: 'Okta', cat: 'tool', icon: '🛡️', color: '10b981' },
 
-    // 🟨 Tools & Software (Yellow)
-    { id: 'tool-tf', label: 'Terraform', cat: 'tool', icon: '🏗️', color: 'eab308' },
-    { id: 'tool-adv', label: 'Azure DevOps', cat: 'tool', icon: '♾️', color: 'eab308' },
-    { id: 'tool-jenkins', label: 'Jenkins', cat: 'tool', icon: '👨‍✈️', color: 'eab308' },
-    { id: 'tool-nginx', label: 'Nginx', cat: 'tool', icon: '🟢', color: 'eab308' },
-    { id: 'tool-dotnet', label: '.NET Core', cat: 'tool', icon: '⚡', color: 'eab308' },
-    { id: 'tool-angular', label: 'Angular', cat: 'tool', icon: '🅰️', color: 'eab308' },
-    { id: 'tool-sql', label: 'SQL Server', cat: 'tool', icon: '🗄️', color: 'eab308' },
-    { id: 'tool-azure', label: 'Microsoft Azure', cat: 'tool', icon: '☁️', color: 'eab308' },
-    { id: 'tool-docker', label: 'Docker', cat: 'tool', icon: '🐳', color: 'eab308' },
+    // 🟨 DevOps & Tools (Yellow)
+    { id: 'ind-azure', label: 'Microsoft Azure', cat: 'ind', icon: '☁️', color: 'eab308' },
+    { id: 'ind-adv', label: 'Azure DevOps', cat: 'ind', icon: '♾️', color: 'eab308' },
+    { id: 'ind-git', label: 'Git', cat: 'ind', icon: '🔀', color: 'eab308' },
+    { id: 'ind-gha', label: 'GitHub Actions', cat: 'ind', icon: '🤖', color: 'eab308' },
+    { id: 'ind-cicd', label: 'CI/CD Pipelines', cat: 'ind', icon: '🔄', color: 'eab308' },
+    { id: 'ind-docker', label: 'Docker', cat: 'ind', icon: '🐳', color: 'eab308' },
+    { id: 'ind-k8s', label: 'Kubernetes', cat: 'ind', icon: '☸️', color: 'eab308' },
+    { id: 'ind-nginx', label: 'Nginx', cat: 'ind', icon: '🟢', color: 'eab308' },
   ];
 
   const links = [
     // Hub to Items
-    { source: 'hub-tech', target: 'tech-cloud' },
-    { source: 'hub-tech', target: 'tech-cicd' },
-    { source: 'hub-tech', target: 'tech-azure' },
-    { source: 'hub-tech', target: 'tech-gha' },
-    { source: 'hub-tech', target: 'tech-shell' },
-    { source: 'hub-tech', target: 'tech-docker' },
-    { source: 'hub-tech', target: 'tech-ci' },
+    { source: 'hub-tech', target: 'tech-aspnet' },
+    { source: 'hub-tech', target: 'tech-csharp' },
+    { source: 'hub-tech', target: 'tech-webapi' },
+    { source: 'hub-tech', target: 'tech-sql' },
+    { source: 'hub-tech', target: 'tech-sp' },
+    { source: 'hub-tech', target: 'tech-ef' },
+    { source: 'hub-tech', target: 'tech-rest' },
 
-    { source: 'hub-ind', target: 'ind-cloud' },
-    { source: 'hub-ind', target: 'ind-config' },
-    { source: 'hub-ind', target: 'ind-iac' },
-    { source: 'hub-ind', target: 'ind-devops' },
-    { source: 'hub-ind', target: 'ind-sec' },
-    { source: 'hub-ind', target: 'ind-sre' },
-    { source: 'hub-ind', target: 'ind-micro' },
-    { source: 'hub-ind', target: 'ind-agile' },
-
-    { source: 'hub-tool', target: 'tool-tf' },
-    { source: 'hub-tool', target: 'tool-adv' },
-    { source: 'hub-tool', target: 'tool-jenkins' },
-    { source: 'hub-tool', target: 'tool-nginx' },
-    { source: 'hub-tool', target: 'tool-dotnet' },
+    { source: 'hub-tool', target: 'tool-html' },
+    { source: 'hub-tool', target: 'tool-css' },
+    { source: 'hub-tool', target: 'tool-js' },
     { source: 'hub-tool', target: 'tool-angular' },
-    { source: 'hub-tool', target: 'tool-sql' },
-    { source: 'hub-tool', target: 'tool-azure' },
-    { source: 'hub-tool', target: 'tool-docker' },
+    { source: 'hub-tool', target: 'tool-jwt' },
+    { source: 'hub-tool', target: 'tool-okta' },
+
+    { source: 'hub-ind', target: 'ind-azure' },
+    { source: 'hub-ind', target: 'ind-adv' },
+    { source: 'hub-ind', target: 'ind-git' },
+    { source: 'hub-ind', target: 'ind-gha' },
+    { source: 'hub-ind', target: 'ind-cicd' },
+    { source: 'hub-ind', target: 'ind-docker' },
+    { source: 'hub-ind', target: 'ind-k8s' },
+    { source: 'hub-ind', target: 'ind-nginx' },
 
     // Cross-links
-    { source: 'tech-azure', target: 'tool-azure' },
-    { source: 'tech-docker', target: 'tool-docker' },
-    { source: 'tech-gha', target: 'tech-cicd' },
-    { source: 'ind-config', target: 'tool-tf' },
+    { source: 'tech-aspnet', target: 'tech-csharp' },
+    { source: 'tech-sql', target: 'tech-sp' },
+    { source: 'tech-aspnet', target: 'tech-ef' },
+    { source: 'tech-rest', target: 'tech-webapi' },
+    { source: 'tool-jwt', target: 'tool-okta' },
+    { source: 'ind-gha', target: 'ind-cicd' },
+    { source: 'ind-azure', target: 'ind-adv' },
+    { source: 'ind-docker', target: 'ind-k8s' },
   ];
 
   // Simulation - Significantly increased spacing and repulsion
@@ -519,7 +517,7 @@ function initTyped() {
   const el = document.getElementById('typed-text');
   if (!el) return;
 
-  const phrases = ['Engineer', 'Architect', 'Automation Expert', 'Cloud Builder', 'GitOps Wizard'];
+  const phrases = ['Full Stack Dev', 'Backend Engineer', 'API Architect', '.NET Developer', 'Cloud Builder'];
   let pIdx = 0, cIdx = 0, deleting = false;
 
   function type() {
@@ -558,37 +556,38 @@ function initTerminal() {
 
   const sessions = [
     {
-      cmd: 'kubectl rollout status deployment/api -n prod',
-      output: `deployment "api" successfully rolled out
-Replicas: 5/5 ready | CPU: 45% | Memory: 62%
-✓ Zero-downtime deployment complete in 2m 34s`,
+      cmd: 'dotnet run --project Api --launch-profile Production',
+      output: `Building...
+info: Microsoft.Hosting.Lifetime[14]
+Now listening on: https://localhost:5001
+✓ API running — all health checks passed
+✓ JWT auth middleware active`,
       color: '#10b981'
     },
     {
-      cmd: 'terraform plan -out=tfplan && terraform apply tfplan',
-      output: `Plan: 12 to add, 3 to change, 0 to destroy.
-Applying state changes...
-✓ Infrastructure provisioned in 3m 12s
-✓ All security policies enforced
-✓ Monitoring & alerts configured`,
+      cmd: 'dotnet ef database update --project Data',
+      output: `Applying migration '20250701_AddUserRoles'...
+✓ Migration applied successfully
+✓ Database schema up to date
+✓ Seed data verified`,
       color: '#6366f1'
     },
     {
-      cmd: 'helm upgrade --install kesava ./chart --wait',
-      output: `Release "kesava" has been upgraded.
-✓ Deployment ready (5/5 pods running)
-✓ Service endpoints healthy
-✓ Ingress configured with TLS
-✓ Rollback available`,
+      cmd: 'ng build --configuration production && az webapp deploy',
+      output: `✔ Browser application bundle generation complete.
+✓ Angular build: 145KB gzipped
+✓ Deployed to Azure App Service
+✓ Slot swap: staging → production
+✓ Zero-downtime deployment complete`,
       color: '#06b6d4'
     },
     {
-      cmd: 'docker build --platform linux/amd64 -t kesava/devops:v2.1 .',
-      output: `[+] Building 2.8s (14/14) FINISHED
+      cmd: 'docker build -t kesava/app:v2.1 . && docker push',
+      output: `[+] Building 3.2s (12/12) FINISHED
 ✓ Multi-stage build optimized
-✓ Image size: 145MB (45% reduction)
-✓ Security scan: 0 vulnerabilities
-✓ Pushed to registry in 1.2s`,
+✓ Image size: 89MB (.NET runtime)
+✓ Pushed to Azure Container Registry
+✓ K8s deployment updated`,
       color: '#f59e0b'
     }
   ];
